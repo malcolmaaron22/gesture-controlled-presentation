@@ -1052,18 +1052,26 @@ class GestureControlUI:
             # Schedule the next update
             self.master.after(10, self.update_camera)
     
-    def toggle_detection(self):
-        """Toggle gesture detection on/off"""
-        self.detection_active = not self.detection_active
-        
+    def set_detection_state(self, enabled, manual=True):
+        """Set detection on/off. Only manual call can disable detection."""
+        if not enabled and not manual:
+            # Prevent any automatic code from turning off detection
+            logger.info("Blocked automatic detection stop; only manual stop is allowed.")
+            return
+
+        self.detection_active = enabled
         if self.detection_active:
             self.start_btn.config(text="Stop Detection")
-            # Update status display
             self.presentation_status.config(text=f"Presentation: {'Active' if self.gc_system.is_presentation_active else 'Not active'}")
         else:
             self.start_btn.config(text="Start Detection")
             self.gesture_status.config(text="Gesture: None")
             self.emotion_status.config(text="Emotion: Not detected")
+
+    def toggle_detection(self):
+        """Toggle gesture detection on/off"""
+        # Always treat this as manual control from the button
+        self.set_detection_state(not self.detection_active, manual=True)
     
     def authenticate_user(self):
         """Authenticate the current user"""
