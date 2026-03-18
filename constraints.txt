@@ -1,0 +1,7 @@
+# Keep mediapipe compatible
+mediapipe==0.10.14
+protobuf==4.25.3
+
+# Keep tensorflow from jumping to 2.20+ (protobuf 5.28+)
+tensorflow==2.15.0
+tf-keras==2.15.0
